@@ -1,0 +1,6 @@
+{
+  "name": "SalonPilot AI",
+  "description": "Secure multi-tenant SaaS salon management platform with role-based access control, admin panel, and AI front-desk dispatch.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

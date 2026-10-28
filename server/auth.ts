@@ -1,5 +1,5 @@
 import crypto from 'crypto';
-import { User, PublicUser } from './types.ts';
+import type { User, PublicUser } from './types.ts';
 
 /**
  * Cryptographically secure password hashing using Node's scrypt.

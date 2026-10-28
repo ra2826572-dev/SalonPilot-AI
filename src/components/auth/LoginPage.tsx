@@ -188,6 +188,16 @@ export const LoginPage: React.FC<LoginPageProps> = ({
               <button
                 type="button"
                 onClick={() =>
+                  fillCredentials('ra2826572@gmail.com', '59115911', 'Your Admin Account (ra2826572@gmail.com)')
+                }
+                className="col-span-2 px-2.5 py-2 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-[#006a51] font-bold text-left truncate transition-colors border border-emerald-300 flex items-center justify-between"
+              >
+                <span>👑 Your Admin Account (ra2826572@gmail.com)</span>
+                <span className="text-[10px] bg-emerald-200/80 px-1.5 py-0.5 rounded text-emerald-900 font-bold">1-Click Sign In</span>
+              </button>
+              <button
+                type="button"
+                onClick={() =>
                   fillCredentials('admin@salonpilot.ai', 'ChangeMeSecureAdmin2025!', 'Platform Admin')
                 }
                 className="px-2.5 py-1.5 rounded-lg bg-[#efeeeb] hover:bg-[#e3e2df] text-[#1a1c1a] font-medium text-left truncate transition-colors border border-[#bdc9c2]/50"

@@ -1,4 +1,4 @@
-import {
+import type {
   User,
   Salon,
   SalonMembership,
@@ -225,36 +225,44 @@ class Database {
       }
     }
 
-    if (!existingAdmin) {
-      // Secure server-side provisioning using env vars
-      const adminEmail = (process.env.INITIAL_ADMIN_EMAIL || 'admin@salonpilot.ai').trim().toLowerCase();
-      const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || 'ChangeMeSecureAdmin2025!';
+    // 1. Provision Platform Admins
+    const adminEmails = [
+      (process.env.INITIAL_ADMIN_EMAIL || 'admin@salonpilot.ai').trim().toLowerCase(),
+      'admin@salonpilot.ai',
+      'ra2826572@gmail.com'
+    ];
 
-      const { hash, salt } = hashPassword(adminPassword);
-      const adminUser: User = {
-        id: 'user-platform-admin-01',
-        email: adminEmail,
-        passwordHash: hash,
-        salt,
-        fullName: 'Platform Owner',
-        role: 'PLATFORM_ADMIN',
-        salonId: null,
-        emailVerified: true,
-        failedLoginAttempts: 0,
-        createdAt: new Date().toISOString()
-      };
-      this.users.set(adminUser.id, adminUser);
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || '59115911';
 
-      this.addAuditLog({
-        actorId: 'system-bootstrap',
-        actorEmail: adminEmail,
-        actorRole: 'SYSTEM',
-        action: 'INITIAL_ADMIN_BOOTSTRAP',
-        targetType: 'security',
-        targetId: adminUser.id,
-        details: 'Initial platform administrator account provisioned via secure server bootstrap.',
-        ip: '127.0.0.1'
-      });
+    for (const email of adminEmails) {
+      if (!this.findUserByEmail(email)) {
+        const passToHash = email === 'admin@salonpilot.ai' ? 'ChangeMeSecureAdmin2025!' : adminPassword;
+        const { hash, salt } = hashPassword(passToHash);
+        const adminUser: User = {
+          id: `user-admin-${email.replace(/[^a-z0-9]/g, '-')}`,
+          email,
+          passwordHash: hash,
+          salt,
+          fullName: 'Platform Owner',
+          role: 'PLATFORM_ADMIN',
+          salonId: null,
+          emailVerified: true,
+          failedLoginAttempts: 0,
+          createdAt: new Date().toISOString()
+        };
+        this.users.set(adminUser.id, adminUser);
+
+        this.addAuditLog({
+          actorId: 'system-bootstrap',
+          actorEmail: email,
+          actorRole: 'SYSTEM',
+          action: 'INITIAL_ADMIN_BOOTSTRAP',
+          targetType: 'security',
+          targetId: adminUser.id,
+          details: `Platform administrator account (${email}) provisioned via secure server bootstrap.`,
+          ip: '127.0.0.1'
+        });
+      }
     }
 
     // 2. Provision Default Demo Salon: Maison Chic (Downtown)
